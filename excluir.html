@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Excluir Questões</title>
+  <link rel="icon" type="image/png" href="imagem.png">
+  <img src="imagem.png" class="floating-logo" alt="Logo">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+/* =====================
+   RESET
+===================== */
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* =====================
+   FUNDO
+===================== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #000000;
+
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0%,
+    #F7F3ED 50%,
+    #E6DAC8 100%
+  );
+}
+
+/* =====================
+   CARD
+===================== */
+.qc-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 28px;
+
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.12),
+    rgba(255,255,255,0.03)
+  );
+
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+}
+
+/* =====================
+   CHIPS
+===================== */
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  cursor: pointer;
+
+  background: rgba(0,0,0,0.5);
+  color: #ffffff;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.chip.active {
+  background: linear-gradient(135deg, #DA9500, #8E6320);
+  color: #000;
+  border-color: #DA9500;
+}
+
+/* =====================
+   INPUT SEARCH
+===================== */
+.search {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.25);
+  margin-bottom: 20px;
+
+  background: rgba(0,0,0,0.6);
+  color: #ffffff;
+}
+
+.search::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+/* =====================
+   GRID
+===================== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+/* =====================
+   SELECT
+===================== */
+select {
+  width: 100%;
+  padding: 14px 46px 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.3);
+
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255,255,255,0.15),
+      rgba(0,0,0,0.6)
+    );
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+
+  appearance: none;
+  cursor: pointer;
+
+  background-image:
+    linear-gradient(
+      160deg,
+      rgba(255,255,255,0.15),
+      rgba(0,0,0,0.6)
+    ),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='white'><path d='M7 10l5 5 5-5z'/></svg>");
+
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: auto, 16px;
+
+  transition: all 0.25s ease;
+}
+
+select:hover {
+  border-color: #DA9500;
+  transform: translateY(-1px);
+}
+
+select:focus {
+  outline: none;
+  border-color: #DA9500;
+  box-shadow:
+    0 0 0 3px rgba(218,149,0,0.4),
+    0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* =====================
+   OPTION
+===================== */
+option {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* =====================
+   AÇÕES
+===================== */
+.actions {
+  display: flex;
+  gap: 30px;
+  margin-top: 24px;
+}
+
+.actions button {
+  padding: 14px 18px;
+}
+
+/* =====================
+   BOTÕES
+===================== */
+button {
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+/* Botão principal */
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #DA9500, #8E6320);
+  color: #000;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Botão secundário */
+.btn-clear {
+  background: rgba(0,0,0,0.7);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* =====================
+   MENSAGEM
+===================== */
+#msg {
+  margin-top: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* =====================
+   LOGO FLUTUANTE
+===================== */
+.floating-logo {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+
+  width: 68px;
+  height: 68px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  background: #ffffff;
+  padding: 4px;
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.6),
+    0 0 0 4px rgba(218,149,0,0.6);
+
+  z-index: 999;
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.floating-logo:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.8),
+    0 0 0 6px rgba(218,149,0,0.9);
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Excluir Questões</h1>
+
+  <div class="card">
+    <select id="materia">
+      <option value="">Escolha a matéria</option>
+      <option value="Matemática">Matemática</option>
+      <option value="Português">Português</option>
+    </select>
+
+    <select id="assunto" disabled>
+      <option value="">Escolha o assunto</option>
+    </select>
+
+    <div class="actions">
+      <button id="btnFiltrar">Buscar</button>
+      <button class="secondary" onclick="window.history.back()">Voltar</button>
+    </div>
+  </div>
+
+  <div id="lista"></div>
+
+</div>
+
+<script>
+
+const supabaseClient = supabase.createClient(
+  "https://jsmdszcfgvoczkyfzzvu.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzbWRzemNmZ3ZvY3preWZ6enZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1NDA2MTgsImV4cCI6MjA4MjExNjYxOH0.jsVXgSowIbJJcginBJDliVTJIxY_77-rtsiuM_MbL20"
+)
+
+
+const materia = document.getElementById('materia')
+const assunto = document.getElementById('assunto')
+const lista = document.getElementById('lista')
+
+
+const materiasMap = {
+  "Matemática": [
+    "Polinômios",
+    "Produtos Notáveis",
+    "Frações",
+    "Porcentagem",
+    "Triângulos",
+    "Quadriláteros"
+  ],
+  "Português": [
+    "Ortografia",
+    "Concordância",
+    "Romantismo",
+    "Modernismo"
+  ]
+}
+
+
+materia.addEventListener('change', () => {
+  assunto.innerHTML = '<option value="">Escolha o assunto</option>'
+  assunto.disabled = true
+
+  if (!materia.value) return
+
+  assunto.disabled = false
+  materiasMap[materia.value].forEach(a => {
+    const opt = document.createElement('option')
+    opt.value = a
+    opt.textContent = a
+    assunto.appendChild(opt)
+  })
+})
+
+
+document.getElementById('btnFiltrar').addEventListener('click', async () => {
+  lista.innerHTML = '<div class="card">Carregando...</div>'
+
+  let query = supabaseClient
+    .from('questoes')
+    .select('id, enunciado, materia, assunto')
+
+  if (materia.value) query = query.eq('materia', materia.value)
+  if (assunto.value) query = query.eq('assunto', assunto.value)
+
+  const { data, error } = await query
+  lista.innerHTML = ''
+
+  if (error) {
+    lista.innerHTML = '<div class="card">Erro ao buscar questões</div>'
+    return
+  }
+
+  if (!data || data.length === 0) {
+    lista.innerHTML = '<div class="card">Nenhuma questão encontrada</div>'
+    return
+  }
+
+  data.forEach(q => {
+    const card = document.createElement('div')
+    card.className = 'card'
+
+    card.innerHTML = `
+      <p>
+        <strong>${q.materia} — ${q.assunto}</strong><br><br>
+        ${q.enunciado}
+      </p>
+      <button onclick="excluirQuestao('${q.id}')">Excluir</button>
+    `
+
+    lista.appendChild(card)
+  })
+})
+
+
+async function excluirQuestao(id) {
+  if (!confirm('Tem certeza que deseja excluir essa questão?')) return
+
+  const { error } = await supabaseClient
+    .from('questoes')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    alert('Erro ao excluir')
+  } else {
+    alert('Questão excluída!')
+    document.getElementById('btnFiltrar').click()
+  }
+}
+
+(async () => {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const { data: perfil, error } = await supabaseClient
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (error || !perfil || perfil.role !== "admin") {
+    alert("Acesso restrito");
+    window.location.href = "dashboard.html";
+  }
+})();
+
+</script>
+
+</body>
+</html>

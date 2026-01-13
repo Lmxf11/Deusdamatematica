@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="imagem.png">
+
+  <!-- fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== FUNDO ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #000000;
+
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0%,
+    #F7F3ED 50%,
+    #E6DAC8 100%
+  );
+}
+
+/* ===== CARD ===== */
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+
+  background: #ffffff;
+
+  border-radius: 22px;
+  border: 1px solid #E6DAC8;
+
+  box-shadow:
+    0 25px 50px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+
+  animation: fadeUp 0.5s ease both;
+}
+
+/* ===== TÍTULO ===== */
+h2 {
+  text-align: center;
+  margin-bottom: 26px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #8E6320;
+}
+
+/* ===== INPUTS ===== */
+input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+
+  border-radius: 14px;
+  border: 1px solid #E6DAC8;
+
+  background: #F7F3ED;
+  color: #000000;
+
+  font-size: 14px;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+input::placeholder {
+  color: #9c8a6a;
+}
+
+input:focus {
+  border-color: #DA9500;
+  box-shadow: 0 0 0 4px rgba(218,149,0,0.35);
+  transform: translateY(-1px);
+}
+
+/* ===== BOTÃO ===== */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+
+  border-radius: 16px;
+  border: none;
+
+  background: linear-gradient(
+    135deg,
+    #DA9500,
+    #8E6320
+  );
+
+  color: #000000;
+  font-weight: 800;
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(142,99,32,0.45);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ===== TEXTO ===== */
+p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 14px;
+  color: #4B3A1F;
+}
+
+#msg {
+  margin-top: 16px;
+  font-weight: 700;
+  color: #8E6320;
+}
+
+/* ===== LINK ===== */
+a {
+  color: #DA9500;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===== LOGO FLUTUANTE ===== */
+.floating-logo {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  background: #ffffff;
+  padding: 4px;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.15),
+    0 0 0 4px rgba(218,149,0,0.6);
+
+  z-index: 999;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.floating-logo:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 16px 35px rgba(0,0,0,0.25),
+    0 0 0 6px rgba(218,149,0,0.9);
+}
+
+/* ===== ANIMAÇÃO ===== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGO -->
+<img src="imagem.png" class="floating-logo" alt="Logo">
+
+<div class="card">
+  <h2>Entrar</h2>
+
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Senha" required>
+    <button type="submit">Entrar</button>
+  </form>
+
+  <p id="msg"></p>
+
+  <p>
+    Não tem conta?
+    <a href="index.html">Criar agora</a>
+  </p>
+</div>
+
+<script>
+const supabaseUrl = "https://jsmdszcfgvoczkyfzzvu.supabase.co"
+const supabaseKey = "sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn"
+
+const supabaseClient = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+)
+
+const form = document.getElementById("login-form")
+const msg = document.getElementById("msg")
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault()
+
+  msg.style.color = "#facc15"
+  msg.innerText = "Entrando..."
+
+  const email = document.getElementById("email").value
+  const password = document.getElementById("password").value
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  })
+
+  if (error) {
+    msg.style.color = "#f87171"
+    msg.innerText = "Email ou senha inválidos"
+    return
+  }
+
+  msg.style.color = "#4ade80"
+  msg.innerText = "Login feito! Redirecionando..."
+
+  setTimeout(() => {
+    window.location.href = "dashboard.html"
+  }, 1000)
+})
+</script>
+
+</body>
+</html>
