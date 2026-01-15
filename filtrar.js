@@ -1,7 +1,9 @@
 const supabaseClient = supabase.createClient(
-  'https://jsmdszcfgvoczkyfzzvu.supabase.co',
-  'sb_publishable_rqDGnUB-2tHkU4cNz1kRSg_oYRssJLn'
+  'https://nuesjdwidvooinsphpul.supabase.co',
+  'sb_publishable_lxV_9j0p3amnBOBfL_Kidw_kVALeqkB'
 )
+
+
 
 const materia = document.getElementById('materia')
 const area = document.getElementById('area')
