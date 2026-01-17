@@ -18,78 +18,112 @@
 body {
   margin: 0;
   min-height: 100vh;
-  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   background: radial-gradient(
     circle at top left,
     #ffffff 0%,
-    #F7F3ED 50%,
-    #E6DAC8 100%
+    #f7f3ed 50%,
+    #e6dac8 100%
   );
+
+  color: #000;
 }
 
+/* CONTAINER */
+.container {
+  width: 100%;
+  max-width: 600px;
+  padding: 36px;
+}
+
+/* TÍTULO */
 h1 {
   text-align: center;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
   font-size: 28px;
   font-weight: 700;
+  color: #000;
 }
 
+/* CARD */
 .card {
   background: linear-gradient(
     160deg,
-    rgba(255,255,255,0.10),
-    rgba(255,255,255,0.04)
+    rgba(255,255,255,0.9),
+    rgba(255,255,255,0.75)
   );
+
   border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.18);
-  padding: 24px;
+  padding: 26px;
+
+  border: 1px solid rgba(218,149,0,0.35);
+
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.4);
+
   backdrop-filter: blur(14px);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
 }
 
-input, textarea, select {
+/* INPUTS E SELECTS */
+input,
+textarea,
+select {
   width: 100%;
   padding: 14px 18px;
   margin-bottom: 16px;
 
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.12);
-  color: #e0e7ff;
+  border: 1px solid rgba(0,0,0,0.2);
+
+  background: rgba(0,0,0,0.75);
+  color: #ffffff;
 
   font-size: 14px;
   outline: none;
+
+  transition: all 0.25s ease;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #c7d2fe;
+  color: rgba(255,255,255,0.6);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 4px rgba(96,165,250,0.35);
+  border-color: #da9500;
+  box-shadow:
+    0 0 0 3px rgba(218,149,0,0.4),
+    0 12px 30px rgba(0,0,0,0.4);
 }
 
+/* TEXTAREA */
 textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 100px;
 }
 
+/* SELECT */
 select {
   appearance: none;
   cursor: pointer;
+
   background-image:
-    linear-gradient(45deg, transparent 50%, #c7d2fe 50%),
-    linear-gradient(135deg, #c7d2fe 50%, transparent 50%);
-  background-position:
-    calc(100% - 22px) 50%,
-    calc(100% - 16px) 50%;
-  background-size: 6px 6px;
+    linear-gradient(
+      160deg,
+      rgba(0,0,0,0.75),
+      rgba(0,0,0,0.75)
+    ),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='white'><path d='M7 10l5 5 5-5z'/></svg>");
+
   background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: auto, 16px;
 }
 
 select:disabled {
@@ -97,35 +131,60 @@ select:disabled {
   cursor: not-allowed;
 }
 
+/* BOTÃO */
 button {
   width: 100%;
   padding: 14px;
+  margin-top: 8px;
+
   border-radius: 16px;
   border: none;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: #fff;
+
+  background: linear-gradient(135deg, #da9500, #8e6320);
+  color: #000;
+
   font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  transition: all 0.2s ease;
 }
 
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+}
+
+/* MENSAGEM */
 .msg {
-  margin-top: 12px;
+  margin-top: 14px;
   text-align: center;
   font-weight: 600;
 }
 
+/* LOGO FLUTUANTE */
 .floating-logo {
   position: fixed;
   bottom: 24px;
   right: 24px;
+
   width: 68px;
   height: 68px;
+
   border-radius: 50%;
   object-fit: cover;
-  background: #fff;
+
+  background: #ffffff;
   padding: 4px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.6),
+    0 0 0 4px rgba(218,149,0,0.6);
+
+  z-index: 999;
 }
+
 </style>
 </head>
 
@@ -261,5 +320,6 @@ document.getElementById('form').addEventListener('submit', async e => {
 
 </body>
 </html>
+
 
 
