@@ -397,16 +397,10 @@ async function excluirQuestao(id) {
   }
 }
 
-(async () => {
-  const { data: { user } } = await supabaseClient.auth.getUser();
-
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
 
 </script>
 
 </body>
 </html>
+
 
