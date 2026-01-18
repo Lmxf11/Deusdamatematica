@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Questões</title>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <link rel="icon" type="image/png" href="imagem.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -242,6 +242,19 @@ button {
   
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
+  <script defer>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+      throwOnError: false
+    });
+  });
+</script>
   
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -265,7 +278,11 @@ button {
         })
       }
     })
+
+    
   </script>
+
+  
 </head>
 
 <body>
@@ -403,6 +420,7 @@ carregarQuestoes()
 
 </body>
 </html>
+
 
 
 
